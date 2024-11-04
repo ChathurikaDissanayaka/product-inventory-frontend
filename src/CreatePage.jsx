@@ -7,6 +7,8 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useProductStore } from "./store/product";
+import { Toaster, toaster } from "./components/ui/toaster";
 
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
@@ -16,8 +18,23 @@ const CreatePage = () => {
     image: "",
   });
 
-  const handleAddProduct = () => {
-    console.log(newProduct);
+  const { createProduct } = useProductStore();
+
+  const handleAddProduct = async () => {
+    const { success } = await createProduct(newProduct);
+    if(!success){
+      toaster.create({
+        description: "Error saving product",
+        type: "error",
+      });
+    }else{
+      toaster.create({
+        description: "Product saved successfully",
+        type: "success",
+      });
+    }
+    
+    setNewProduct({name: "", quantity: "", price:"", image:""})
   };
 
   return (
@@ -79,6 +96,7 @@ const CreatePage = () => {
           </VStack>
         </Box>
       </VStack>
+      <Toaster />
     </Container>
   );
 };

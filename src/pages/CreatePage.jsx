@@ -13,7 +13,6 @@ import { Toaster, toaster } from "../components/ui/toaster";
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
     name: "",
-    quantity: "",
     price: "",
     image: "",
   });
@@ -34,7 +33,7 @@ const CreatePage = () => {
       });
     }
     
-    setNewProduct({name: "", quantity: "", price:"", image:""})
+    setNewProduct({name: "", price:"", image:""})
   };
 
   return (
@@ -58,15 +57,6 @@ const CreatePage = () => {
               value={newProduct.name}
               onChange={(e) =>
                 setNewProduct({ ...newProduct, name: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Quantity"
-              name="quantity"
-              type="number"
-              value={newProduct.quantity}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, quantity: e.target.value })
               }
             />
             <Input

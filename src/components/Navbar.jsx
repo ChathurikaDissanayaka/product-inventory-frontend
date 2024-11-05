@@ -32,11 +32,11 @@ const Navbar = () => {
         </Text>
         <HStack spacing={2} alignItems={"center"}>
           <Link to={"/create"}>
-            <Button size="sm" variant="subtle">
-              <BsPlusSquare fontSize={20} />
+            <Button size="sm" variant="outline">
+              <BsPlusSquare />
             </Button>
           </Link>
-          <ColorModeButton variant="subtle" />
+          <ColorModeButton variant="outline" />
         </HStack>
       </Flex>
     </Container>

@@ -1,4 +1,13 @@
-import { Box, Heading, HStack, VStack, Input, Button, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  HStack,
+  VStack,
+  Input,
+  Button,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 import {
   DialogActionTrigger,
   DialogBody,
@@ -14,9 +23,25 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { MdOutlineDelete } from "react-icons/md";
 import { useProductStore } from "../store/product";
 import { Toaster, toaster } from "../components/ui/toaster";
+import { useState } from "react";
 
 const ProductCard = ({ product }) => {
-  const { deleteProduct } = useProductStore();
+  const [updatedProduct, setUpdatedProduct] = useState(product);
+  const { deleteProduct, updateProduct } = useProductStore();
+  const handleUpdateProduct = async (pid, updatedProduct) => {
+    const { success } = await updateProduct(pid, updatedProduct);
+    if (!success) {
+      toaster.create({
+        description: "Error updating product",
+        type: "error",
+      });
+    } else {
+      toaster.create({
+        description: "Product updated successfully",
+        type: "success",
+      });
+    }
+  };
   const handleDeleteProduct = async (pid) => {
     const { success } = await deleteProduct(pid);
     if (!success) {
@@ -70,39 +95,57 @@ const ProductCard = ({ product }) => {
               <DialogBody>
                 {/*  */}
                 <VStack spacing={4}>
-            <Input
-              placeholder="Product Name"
-              name="name"
-              // value={updatedProduct.name}
-              // onChange={(e) =>
-              //   setUpdatedProduct({ ...updatedProduct, name: e.target.value })
-              // }
-            />
-            <Input
-              placeholder="Price"
-              name="price"
-              type="number"
-              // value={updatedProduct.price}
-              // onChange={(e) =>
-              //   setUpdatedProduct({ ...updatedProduct, price: e.target.value })
-              // }
-            />
-            <Input
-              placeholder="Image Url"
-              name="image"
-              // value={updatedProduct.image}
-              // onChange={(e) =>
-              //   setUpdatedProduct({ ...updatedProduct, image: e.target.value })
-              // }
-            />
-          </VStack>
+                  <Input
+                    placeholder="Product Name"
+                    name="name"
+                    value={updatedProduct.name}
+                    onChange={(e) =>
+                      setUpdatedProduct({
+                        ...updatedProduct,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                  <Input
+                    placeholder="Price"
+                    name="price"
+                    type="number"
+                    value={updatedProduct.price}
+                    onChange={(e) =>
+                      setUpdatedProduct({
+                        ...updatedProduct,
+                        price: e.target.value,
+                      })
+                    }
+                  />
+                  <Input
+                    placeholder="Image Url"
+                    name="image"
+                    value={updatedProduct.image}
+                    onChange={(e) =>
+                      setUpdatedProduct({
+                        ...updatedProduct,
+                        image: e.target.value,
+                      })
+                    }
+                  />
+                </VStack>
                 {/*  */}
               </DialogBody>
               <DialogFooter>
                 <DialogActionTrigger asChild>
                   <Button variant="outline">Cancel</Button>
                 </DialogActionTrigger>
-                <Button colorPalette={"purple"}>Update</Button>
+                <DialogActionTrigger asChild>
+                  <Button
+                    colorPalette={"purple"}
+                    onClick={() =>
+                      handleUpdateProduct(product._id, updatedProduct)
+                    }
+                  >
+                    Update
+                  </Button>
+                </DialogActionTrigger>
               </DialogFooter>
               <DialogCloseTrigger />
             </DialogContent>

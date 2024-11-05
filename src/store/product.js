@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+const VITE_BACKEND_URL = import.meta.env.VITE_BACKEND_URL; 
+
 export const useProductStore = create((set) => ({
   products: [],
   setProducts: (products) => set({ products }),
@@ -7,7 +9,7 @@ export const useProductStore = create((set) => ({
     if (!newProduct.name || !newProduct.price || !newProduct.image) {
       return { success: false, message: "Please fill in all fields." };
     }
-    const res = await fetch("/api/products", {
+    const res = await fetch(`${VITE_BACKEND_URL}/api/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -19,12 +21,12 @@ export const useProductStore = create((set) => ({
     return { success: true, message: "Product created successfully" };
   },
   fetchProducts: async () => {
-    const res = await fetch("/api/products");
+    const res = await fetch(`${VITE_BACKEND_URL}/api/products`);
     const data = await res.json();
     set({ products: data.data });
   },
   deleteProduct: async (pid) => {
-    const res = await fetch(`/api/products/${pid}`, {
+    const res = await fetch(`${VITE_BACKEND_URL}/api/products/${pid}`, {
       method: "DELETE",
     });
     const data = await res.json();
@@ -35,7 +37,7 @@ export const useProductStore = create((set) => ({
     return { success: true, message: data.message };
   },
   updateProduct: async (pid, updatedProduct) => {
-     const res = await fetch(`api/products/${pid}`, {
+     const res = await fetch(`${VITE_BACKEND_URL}/api/products/${pid}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
